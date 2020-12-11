@@ -28,14 +28,10 @@ def touch(name):
     with open(os.getcwd()+"/"+name,"w") as _:
         pass
 
-def create_directory(foldername):
-
-    path = str(os.environ.get('workspace_path'))
-    _dir = path + "/" + foldername
-
+def create_directory(_dir):
     os.mkdir(_dir)
     os.chdir(_dir)
-
+        
     # Possibility to create sass projects with a third parameter = "web" 
     if len(sys.argv)==3:
         if sys.argv[2] == "web":
@@ -51,16 +47,22 @@ def create_directory(foldername):
             os.mkdir("pages")
             os.chdir(_dir)
 
-    print(f'Project {foldername} created locally: {_dir}')
+    print(f'Project created locally: {_dir}')
 
 def main():
     # given as first parameter
     foldername = str(sys.argv[1])
+    path = str(os.environ.get('workspace_path'))
+    _dir = path + "/" + foldername
 
-    create_directory(foldername)
-    git_init(foldername)
-    
-    os.system('code .')
+    if not os.path.exists(_dir):
+        create_directory(_dir)
+        git_init(foldername)
+        
+        os.system('code .')
+
+    else:
+        print("Projekt existiert bereits")
 
 if __name__ == "__main__":
     main()
