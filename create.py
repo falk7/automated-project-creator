@@ -21,17 +21,14 @@ def git_init(foldername: str):
 
     for c in commands:
         os.system(c)
-
-    print("git repository created locally and pushed to github")
-    os.system('code .')
+    
+    print("git repository initialized and pushed to github")
 
 def touch(name):
     with open(os.getcwd()+"/"+name,"w") as _:
         pass
 
-def main():
-    # given as first parameter
-    foldername = str(sys.argv[1])
+def create_directory(foldername):
 
     path = str(os.environ.get('workspace_path'))
     _dir = path + "/" + foldername
@@ -52,14 +49,18 @@ def main():
             os.mkdir("components")
             os.mkdir("layout")
             os.mkdir("pages")
-
             os.chdir(_dir)
 
-            
-    print(f'directory {foldername} created locally')
+    print(f'Project {foldername} created locally: {_dir}')
 
+def main():
+    # given as first parameter
+    foldername = str(sys.argv[1])
 
+    create_directory(foldername)
     git_init(foldername)
+    
+    os.system('code .')
 
 if __name__ == "__main__":
     main()
