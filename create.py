@@ -1,73 +1,43 @@
-import sys 
 import os
+import sys
 from github import Github
 
-def git_init(foldername: str):
-    token = os.environ.get('gt') 
-    gh=Github(token)
-
-    user = gh.get_user()
-    login = user.login
-
-    repo = user.create_repo(foldername)
-
-    commands = [f'echo # {repo.name} >> README.md',
-            'git init',
-            'git add .',
-            'git commit -m "Initial commit"',
-            'git branch -M main',
-            f'git remote add origin https://github.com/{login}/{foldername}.git',
-            'git push -u origin main']
-
-    for c in commands:
-        os.system(c)
-    
-    print("git repository initialized and pushed to github")
-
-def touch(name):
-    with open(os.getcwd()+"/"+name,"w") as _:
-        pass
-
-def create_directory(_dir):
-    os.mkdir(_dir)
-    os.chdir(_dir)
-        
-    # Possibility to create sass projects with a third parameter = "web" 
-    if len(sys.argv)==3:
-        if sys.argv[2] == "web":
-            os.mkdir("css")
-            os.mkdir("sass")
-            touch("index.html")
-            os.chdir("sass")
-            touch("_main.scss")
-            os.mkdir("abstracts")
-            os.mkdir("base")
-            os.mkdir("components")
-            os.mkdir("layout")
-            os.mkdir("pages")
-            os.chdir(_dir)
-
-    print(f'Project created locally: {_dir}')
-
 def main():
-    # given as first parameter
-    foldername = str(sys.argv[1])
-    path = str(os.environ.get('workspace_path'))
-    _dir = path + "/" + foldername
+    project_name = str(sys.argv[1])
+    workspace_path = "C:/Users/falka/Workspace"
+    directory_path = workspace_path + "/" + project_name
 
-    if not os.path.exists(_dir):
-        create_directory(_dir)
-        git_init(foldername)
+    if not os.path.exists(directory_path):
+        os.mkdir(directory_path)
+        os.chdir(directory_path)
+        print(f'Projekt lokal erstellt: {directory_path}')
+
+        github_access_token = os.environ.get('gt')
+        gh=Github(github_access_token)
         
-        os.system('code .')
+        user = gh.get_user()
+        login = user.login
+
+        repo = user.create_repo(project_name)
+
+        commands = [f'echo # {repo.name} >> README.md',
+        'git init',
+        'git add .',
+        'git commit -m "Initial commit"',
+        'git branch -M main',
+        f'git remote add origin https://github.com/{login}/{project_name}.git',
+        'git push -u origin main']
+
+        for c in commands:
+            os.system(c)
+    
+        print("git repository initialisiert und nach github gepusht")
+
 
     else:
-        print("Projekt existiert bereits")
+        print(f"Projekt {project_name} existiert bereits im Workspace {workspace_path}")
+
+
 
 if __name__ == "__main__":
     main()
-
-    
-
- 
-    
