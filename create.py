@@ -25,7 +25,7 @@ def main():
         'git add .',
         'git commit -m "Initial commit"',
         'git branch -M main',
-        f'git remote add origin https://github.com/{login}/{project_name}.git',
+        f'git remote add origin git@github.com:{login}/{project_name}.git',
         'git push -u origin main']
 
         for c in commands:
